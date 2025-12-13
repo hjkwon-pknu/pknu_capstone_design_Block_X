@@ -1,0 +1,8 @@
+# .gitignore
+__pycache__/
+*.csv
+*.zip
+*.pkl
+.ipynb_checkpoints/
+/binance_data/
+/data/
