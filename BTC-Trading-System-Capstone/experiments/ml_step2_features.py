@@ -33,8 +33,11 @@ except:
     from sklearn.linear_model import LogisticRegression
     from sklearn.metrics import accuracy_score, balanced_accuracy_score, classification_report
 
-FILE_PATH = r"C:\Users\User\binance_data\1m_history.csv"
-USE_ROWS = 1_000_000
+#################################
+import os
+FILE_PATH = os.environ.get("BTC_FILE_PATH", r"C:\Users\User\binance_data\1m_history.csv")
+USE_ROWS = None
+#################################
 
 def load_data(path, use_rows=None):
     df = pd.read_csv(path, usecols=['datetime', 'open', 'high', 'low', 'close', 'volume'])
