@@ -32,11 +32,12 @@ try:
 except:
     pip_install("xgboost")
     import xgboost as xgb
-
+    
+#################################
 import os
 FILE_PATH = os.environ.get("BTC_FILE_PATH", r"C:\Users\User\binance_data\1m_history.csv")
-
-USE_ROWS = 1_000_000
+USE_ROWS = None
+#################################
 
 def load_data(path, use_rows=None):
     df = pd.read_csv(path, usecols=['datetime', 'open', 'high', 'low', 'close', 'volume'])
