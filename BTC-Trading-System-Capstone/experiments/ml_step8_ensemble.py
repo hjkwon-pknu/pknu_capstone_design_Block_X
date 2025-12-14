@@ -45,9 +45,11 @@ except:
     pip_install("catboost")
     from catboost import CatBoostClassifier
 
+#################################
 import os
 FILE_PATH = os.environ.get("BTC_FILE_PATH", r"C:\Users\User\binance_data\1m_history.csv")
 USE_ROWS = None
+#################################
 
 def load_data(path, use_rows=None):
     df = pd.read_csv(path, usecols=['datetime', 'open', 'high', 'low', 'close', 'volume'])
