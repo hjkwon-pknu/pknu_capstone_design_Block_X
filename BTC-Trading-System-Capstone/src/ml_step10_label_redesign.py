@@ -44,37 +44,6 @@ def load_data(path: str, use_rows: int | None = None) -> pd.DataFrame:
     df = df.sort_values("datetime").reset_index(drop=True)
     return df
 
-
-# def resample_ohlcv(df_1m: pd.DataFrame, rule: str) -> pd.DataFrame:
-#     """
-#     1분봉을 원하는 타임프레임으로 리샘플링.
-
-#     label='right', closed='right' 로 설정해서,
-#     - 각 리샘플 구간의 **우측 끝 시점(종가 시각)**에 캔들을 라벨링
-#     - merge_asof 시 항상 \"완전히 끝난 상위 타임프레임 캔들\"만 사용하도록 함
-#       → 상위 타임프레임 피처가 미래 정보를 새는 것을 방지.
-#     """
-#     df = df_1m.copy()
-#     df["timestamp"] = pd.to_datetime(df["datetime"], unit="ms")
-#     df = df.set_index("timestamp")
-
-#     resampled = (
-#         df.resample(rule, label="right", closed="right")
-#         .agg(
-#             {
-#                 "datetime": "first",
-#                 "open": "first",
-#                 "high": "max",
-#                 "low": "min",
-#                 "close": "last",
-#                 "volume": "sum",
-#             }
-#         )
-#         .dropna()
-#     )
-
-#     return resampled.reset_index(drop=True)
-
 def resample_ohlcv(df_1m: pd.DataFrame, rule: str) -> pd.DataFrame:
     """
     - label='right', closed='right'로 '캔들 종료 시각'에 라벨링
@@ -306,29 +275,6 @@ def time_split(df: pd.DataFrame, test_ratio: float = 0.2) -> tuple[pd.DataFrame,
     train = df.iloc[:split].copy()
     test = df.iloc[split:].copy()
     return train, test
-
-### pnl 정합성 위해서
-
-# def calculate_pnl_from_forward_return(test_df, signal, horizon=4, cost=0.002):
-#     """
-#     signal: -1/0/+1 (Short/Flat/Long) 또는 0/1(롱만)도 지원
-#     filter 데이터에서도 fwd_ret 기반으로 PnL을 계산
-#     """
-#     import numpy as np
-
-#     col = f"fwd_ret_h{horizon}"
-#     if col in test_df.columns:
-#         r = test_df[col].to_numpy()
-#     else:
-#         future = test_df["close"].shift(-horizon)
-#         r = (future / test_df["close"] - 1).fillna(0).to_numpy()
-
-#     signal = np.asarray(signal).astype(int)
-#     trade = (signal != 0).astype(float)
-
-#     pnl = signal * r - cost * trade
-#     return float(pnl.sum()), int(trade.sum())
-#######
 
 def quick_xgb_check(df: pd.DataFrame, features: list[str], label_col: str = "y") -> None:
     """새 라벨로 간단한 XGBoost 성능을 체크하는 유틸 (선택 실행)."""
